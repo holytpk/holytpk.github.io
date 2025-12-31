@@ -1,184 +1,1417 @@
-<!DOCTYPE html>
-
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-<title>Ling's Desktop Blog</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<link rel="stylesheet" href="src/style.css">
-<script src="src/script.js"></script>
-<style>
-a:link, a:visited {
-  background-color: #9B00FF;
-  color: white;
-  padding: 15px 25px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-}
-a:hover, a:active {
-  background-color: teal;
-}
-body,h1,h2,h3,h4,h5 {font-family: "Raleway", DFKai-SB}
-h1 {text-align: center;}
-p {text-align: center;}
-div {text-align: center;
-   .text-glow {
-    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 42px #0fa, 0 0 82px #0fa,0 0 92px #0fa;
-	color: white;
-	font-size: 30px;
-	text-align: center;	  	
-   }}	
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Particle Idle Lab — Learn Particle Physics</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #111a33;
+      --panel2: #0f1730;
+      --text: #eaf0ff;
+      --muted: #a7b5ff;
+      --accent: #7cf7c6;
+      --accent2: #7cb7ff;
+      --danger: #ff6b6b;
+      --gold: #ffd36b;
+      --border: rgba(255,255,255,.12);
+      --shadow: rgba(0,0,0,.35);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--text);
+      background:
+        radial-gradient(1200px 900px at 20% 10%, rgba(124,183,255,.15), transparent 60%),
+        radial-gradient(1200px 900px at 80% 40%, rgba(124,247,198,.12), transparent 60%),
+        radial-gradient(1000px 700px at 50% 90%, rgba(255,211,107,.08), transparent 55%),
+        var(--bg);
+      overflow-x: hidden;
+    }
+    a { color: var(--accent2); }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 18px 14px 60px; }
+    header {
+      display: flex; flex-wrap: wrap;
+      align-items: center; justify-content: space-between;
+      gap: 10px; margin-bottom: 14px;
+    }
+    .title {
+      display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+    }
+    h1 { margin: 0; font-size: 20px; letter-spacing: .3px; }
+    .tagline { color: var(--muted); font-size: 13px; }
+    .topbar {
+      display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+    }
+    .pill {
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      box-shadow: 0 6px 14px var(--shadow);
+      display: inline-flex; gap: 8px; align-items: center;
+      user-select: none;
+    }
+    .pill b { font-family: var(--mono); font-weight: 700; }
+    .btn {
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
+      color: var(--text);
+      border-radius: 10px;
+      padding: 9px 10px;
+      cursor: pointer;
+      font-weight: 700;
+      box-shadow: 0 10px 20px var(--shadow);
+      transition: transform .05s ease, border-color .15s ease, background .15s ease;
+      user-select: none;
+    }
+    .btn:hover { border-color: rgba(124,247,198,.5); }
+    .btn:active { transform: translateY(1px); }
+    .btn[disabled] { opacity: .5; cursor: not-allowed; }
+    .btn.small { padding: 7px 9px; border-radius: 9px; font-size: 12px; }
+    .btn.danger:hover { border-color: rgba(255,107,107,.6); }
+    .grid {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 12px;
+      align-items: start;
+    }
+    @media (max-width: 940px) { .grid { grid-template-columns: 1fr; } }
+
+    .panel {
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+      box-shadow: 0 18px 30px var(--shadow);
+    }
+    .panel h2 {
+      margin: 0 0 10px;
+      font-size: 14px;
+      letter-spacing: .4px;
+      color: #dbe5ff;
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    }
+    .subtle { color: var(--muted); font-size: 12px; }
+    .mono { font-family: var(--mono); }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .col { display: flex; flex-direction: column; gap: 10px; }
+    .hr { height: 1px; background: var(--border); margin: 10px 0; }
+
+    .big {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 520px) { .big { grid-template-columns: 1fr; } }
+    .stat {
+      background: rgba(0,0,0,.20);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 10px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.03);
+    }
+    .stat .k { color: var(--muted); font-size: 12px; margin-bottom: 4px; }
+    .stat .v { font-size: 18px; font-weight: 900; letter-spacing: .3px; }
+    .stat .v .unit { font-weight: 700; font-size: 12px; color: var(--muted); margin-left: 6px; }
+
+    .cards { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    .card {
+      background: rgba(0,0,0,.18);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px;
+    }
+    .cardhead {
+      display: flex; align-items: start; justify-content: space-between; gap: 10px;
+    }
+    .cardtitle { font-weight: 900; }
+    .cardmeta { color: var(--muted); font-size: 12px; margin-top: 3px; }
+    .carddesc { color: #d5dfff; font-size: 12px; margin-top: 8px; line-height: 1.35; }
+    .price {
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      white-space: nowrap;
+    }
+
+    .particlegrid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    @media (max-width: 560px) { .particlegrid { grid-template-columns: 1fr; } }
+
+    .particle {
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      padding: 10px;
+      position: relative;
+    }
+    .particle.locked { opacity: .55; filter: grayscale(.25); }
+    .particle .pname { font-weight: 900; display: flex; align-items: center; gap: 8px; }
+    .badge {
+      font-size: 11px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,.18);
+      color: #dbe5ff;
+    }
+    .particle .props {
+      margin-top: 8px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: #dbe5ff;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+    .particle .props div { opacity: .95; }
+    .tooltip {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      width: 28px; height: 28px;
+      border-radius: 999px;
+      display: grid; place-items: center;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,.25);
+      cursor: pointer;
+      user-select: none;
+    }
+    .tooltip:hover { border-color: rgba(124,183,255,.6); }
+    .modalbg {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.55);
+      display: none;
+      align-items: center; justify-content: center;
+      padding: 18px;
+      z-index: 50;
+    }
+    .modal {
+      max-width: 720px;
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(17,26,51,.98), rgba(15,23,48,.98));
+      box-shadow: 0 25px 60px rgba(0,0,0,.55);
+      padding: 14px;
+    }
+    .modal h3 { margin: 0 0 8px; font-size: 15px; }
+    .modal p { margin: 0 0 10px; color: #dbe5ff; line-height: 1.45; font-size: 13px; }
+    .modal .close { float: right; }
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,.6);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      display: none;
+      z-index: 60;
+      max-width: 92vw;
+      box-shadow: 0 10px 25px rgba(0,0,0,.35);
+    }
+    .log {
+      max-height: 250px;
+      overflow: auto;
+      background: rgba(0,0,0,.20);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px;
+      font-size: 12px;
+      line-height: 1.35;
+      color: #dbe5ff;
+    }
+    .log .entry { padding: 6px 0; border-bottom: 1px dashed rgba(255,255,255,.10); }
+    .log .entry:last-child { border-bottom: 0; }
+    .log .t { color: var(--muted); font-family: var(--mono); font-size: 11px; }
+    .log .m { margin-top: 3px; }
+    .rightActions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+
+    .quiz {
+      border: 1px solid rgba(255,211,107,.25);
+      background: rgba(255,211,107,.08);
+      border-radius: 12px;
+      padding: 10px;
+    }
+    .quiz h4 { margin: 0 0 8px; font-size: 13px; }
+    .quiz .q { color: #fff2d2; font-size: 13px; margin-bottom: 8px; }
+    .quiz .answers { display: flex; gap: 8px; flex-wrap: wrap; }
+    .quiz .answers .btn { border-color: rgba(255,211,107,.35); }
+  </style>
 </head>
-
-<section class="slider-pages">
-
-  <article class="js-scrolling__page js-scrolling__page-1 js-scrolling--active">
-    <div class="slider-page slider-page--left">
-      <div class="slider-page--skew">
-        <div class="slider-page__content">
-        </div>
-        <!-- /.slider-page__content -->
+<body>
+  <div class="wrap">
+    <header>
+      <div class="title">
+        <h1>Particle Idle Lab</h1>
+        <div class="tagline">An incremental game to learn particle physics (mass, charge, spin, interactions)</div>
       </div>
-      <!-- /.slider-page--skew -->
-    </div>
-    <!-- /.slider-page slider-page--left -->
+      <div class="topbar">
+        <div class="pill">Data: <b id="data">0</b></div>
+        <div class="pill">Papers: <b id="papers">0</b></div>
+        <div class="pill">Prestige: <b id="prestige">0</b></div>
+        <button class="btn small" id="btnSave">Save</button>
+        <button class="btn small danger" id="btnReset">Hard Reset</button>
+      </div>
+	  <div id="pageParticle" class="panel" style="display:none; margin-bottom:12px;">
+	    <div class="row" style="justify-content:space-between; align-items:center;">
+	  	<h2 style="margin:0;">Particle Details</h2>
+	  	<button class="btn small" id="btnBack">← Return</button>
+	    </div>
+	    <div class="hr"></div>
+	    <div id="particleDetail"></div>
+	  </div>
 
-    <div class="slider-page slider-page--right">
-      <div class="slider-page--skew">
-        <div class="slider-page__content">
-          <h1 class="slider-page__title slider-page__title--big">
-            <a href="src/cv.html"> CV </a>
-          </h1>
-          <!-- /.slider-page__title slider-page__title--big -->
-          <h2 class="slider-page__title">
-            
+    </header>
+
+    <div class="grid">
+      <!-- LEFT -->
+      <div class="col">
+        <div class="panel">
+          <h2>
+            Experiment Control Room
+            <span class="subtle">Run experiments → collect Data → publish Papers → unlock particles</span>
           </h2>
-          <!-- /.slider-page__title -->
-          <p class="slider-page__description">
-          A brief introduction of who I am. 
-          </p>
-          <!-- /.slider-page__description -->
+
+          <div class="big">
+            <div class="stat">
+              <div class="k">Data per click</div>
+              <div class="v"><span id="dpc">1</span><span class="unit">Data</span></div>
+            </div>
+            <div class="stat">
+              <div class="k">Data per second (automation)</div>
+              <div class="v"><span id="dps">0</span><span class="unit">Data/s</span></div>
+            </div>
+            <div class="stat">
+              <div class="k">Discovery chance</div>
+              <div class="v"><span id="discChance">0%</span><span class="unit">/click</span></div>
+            </div>
+            <div class="stat">
+              <div class="k">Next paper cost</div>
+              <div class="v"><span id="paperCost">100</span><span class="unit">Data</span></div>
+            </div>
+          </div>
+
+          <div class="hr"></div>
+		  <canvas id="mttCanvas" width="500" height="200"></canvas>
+
+          <div class="row">
+            <button class="btn" id="btnExperiment">Run Experiment</button>
+            <button class="btn" id="btnPublish">Publish Paper</button>
+            <button class="btn" id="btnPrestige">Prestige (Reset for bonus)</button>
+          </div>
+
+          <div class="hr"></div>
+
+          <div id="quizBox" class="quiz" style="display:none;">
+            <div class="rightActions">
+              <button class="btn small" id="btnSkipQuiz">Skip</button>
+            </div>
+            <h4>Mini-Quiz (earn bonus Data)</h4>
+            <div class="q" id="quizQ"></div>
+            <div class="answers" id="quizA"></div>
+            <div class="subtle" id="quizHint"></div>
+          </div>
+
+          <div class="hr"></div>
+
+          <h2>
+            Lab Upgrades
+            <span class="subtle">Automation + better measurements</span>
+          </h2>
+          <div class="cards" id="upgradeList"></div>
         </div>
-        <!-- /.slider-page__content -->
+
+        <div class="panel">
+          <h2>
+            Research Log
+            <span class="subtle">What your lab learned recently</span>
+          </h2>
+          <div class="log" id="log"></div>
+        </div>
       </div>
-      <!-- /.slider-page--skew -->
+
+      <!-- RIGHT -->
+      <div class="col">
+        <div class="panel">
+          <h2>
+            Particle Catalog
+            <span class="subtle">Unlock by discoveries + papers</span>
+          </h2>
+          <div class="particlegrid" id="particleGrid"></div>
+        </div>
+
+        <div class="panel">
+          <h2>
+            Help / Rules
+            <span class="subtle">Idle game loop, physics learning loop</span>
+          </h2>
+          <div class="card">
+            <div class="cardtitle">How the game teaches physics</div>
+            <div class="carddesc">
+              Each time you discover a particle, you unlock its real-world properties:
+              <span class="mono">mass (MeV/GeV)</span>, <span class="mono">charge (e)</span>, <span class="mono">spin</span>, and which interaction(s) it participates in
+              (<span class="mono">strong / EM / weak</span>). Mini-quizzes reinforce these ideas.
+            </div>
+          </div>
+          <div class="card">
+            <div class="cardtitle">Prestige</div>
+            <div class="carddesc">
+              Reset to gain <span class="mono">Prestige</span> from your Papers.
+              Prestige increases Data gains permanently, representing better detectors and collaboration scale.
+            </div>
+          </div>
+          <div class="card">
+            <div class="cardtitle">Tip</div>
+            <div class="carddesc">
+              Hover/click the <span class="mono">?</span> on particles to read short, accurate explanations (why charge/spin matters, and which forces apply).
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <!-- /.slider-page slider-page--right -->
-  </article>
-  <!-- /.js-scrolling__page js-scrolling__page-1 js-scrolling--active -->
-
-
-  <article class="js-scrolling__page js-scrolling__page-2">
-    <div class="slider-page slider-page--left">
-      <div class="slider-page--skew">
-        <div class="slider-page__content">
-          <h1 class="slider-page__title">
-            <a href="https://github.com/holytpk?tab=repositories"> Repositories </a>
-          </h1>
-          <!-- /.slider-page__title -->
-          <p class="slider-page__description">
-            Research stuff. 
-          </p>
-          <!-- /.slider-page__description -->
-        </div>
-        <!-- /.slider-page__content -->
-      </div>
-      <!-- /.slider-page--skew -->
-    </div>
-    <!-- /.slider-page slider-page--left -->
-
-    <div class="slider-page slider-page--right">
-      <div class="slider-page--skew">
-        <div class="slider-page__content">
-        </div>
-        <!-- /.slider-page__content -->
-      </div>
-      <!-- /.slider-page--skew -->
-    </div>
-    <!-- /.slider-page slider-page--right -->
-  </article>
-  <!-- /.js-scrolling__page js-scrolling__page-2 -->
-
-
-  <article class="js-scrolling__page js-scrolling__page-3">
-    <div class="slider-page slider-page--left">
-      <div class="slider-page--skew">
-        <div class="slider-page__content">
-        </div>
-        <!-- /.slider-page__content -->
-      </div>
-      <!-- /.slider-page--skew -->
-    </div>
-    <!-- /.slider-page slider-page--left -->
-
-    <div class="slider-page slider-page--right">
-      <div class="slider-page--skew">
-        <div class="slider-page__content">
-          <h1 class="slider-page__title">
-            <a href="src/fictions.html"> Fictions </a>
-          </h1>
-          <!-- /.slider-page__title -->
-          <p class="slider-page__description">
-            Random stories I wrote while being bored. 
-          </p>
-          <!-- /.slider-page__description -->
-        </div>
-        <!-- /.slider-page__content -->
-      </div>
-      <!-- /.slider-page--skew -->
-    </div>
-    <!-- /.slider-page slider-page--right -->
-  </article>
-  <!-- /.js-scrolling__page js-scrolling__page-3 -->
-
-</section> <br>
-<!-- /.slider-pages -->
-
-<div class="container">
-  <div class="jumbotron">
-    <div class="row">
-      <div class="col-xs-12"> <br>
-        <h1 class="text-center">Ling</h1> 
-        <h2 class="text-center"> PhD Student at Purdue University </h2> <br>
-        <div class="thumbnail"><img src="img/2333.jpg" width="300" height="450"> <br>
-          <br>
-        </div> <br>
-        <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
-          <h3>Trivia:</h3> <br>
-          <ul>
-						<li>Get to know me in person at PHYS 390!!</li> <br>
-          </ul>
-          <blockquote>
-            <p>email: he614@purdue.edu</p> <br>
-		  </blockquote> <br>
-	
-		  <div class="poem">
-			<strong>相守</strong><br>
-			<font color="5500FF"> 武陵桃 仙圃柳 <br>  
-			意气遥凌 风度平生友<br>
-			月下心盟三盏酒<br>
-			不负今生 仗剑穿云走<br>
-			越琼楼 逐北斗<br>
-			何似人间 元夜灯如昼<br>
-			契阔寄情山雨后<br>
-			晓梦谁同 许我长相守<br> </font>
-		  </div> <br>
-          
-		
-        </div>
-      </div>
-    </div> 
   </div>
 
-</div>  
+  <!-- MODAL -->
+  <div class="modalbg" id="modalBg" role="dialog" aria-modal="true" aria-label="Info dialog">
+    <div class="modal">
+      <button class="btn small close" id="modalClose">Close</button>
+      <h3 id="modalTitle"></h3>
+      <div id="modalBody"></div>
+      <div class="subtle mono" id="modalFoot"></div>
+    </div>
+  </div>
 
-<!-- Footer -->
-<footer class="footer_bottom">
-  <br>
-  <p>Copyright © Lingqiang He 2023</p> <br>
-</footer>
+  <div class="toast" id="toast"></div>
 
+<script>
+(() => {
+  // ------------------------------
+  // Utilities
+  // ------------------------------
+  const $ = (id) => document.getElementById(id);
+  const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+  const fmt = (n) => {
+    if (!isFinite(n)) return "∞";
+    const abs = Math.abs(n);
+    if (abs < 1e3) return Math.floor(n).toString();
+    const units = ["K","M","B","T","Qa","Qi"];
+    let u = -1, v = n;
+    while (Math.abs(v) >= 1000 && u < units.length - 1) { v /= 1000; u++; }
+    return (v.toFixed(v >= 100 ? 0 : v >= 10 ? 1 : 2)) + units[u];
+  };
+  const now = () => Date.now();
+  const rnd = (a,b) => Math.random()*(b-a)+a;
+  const pick = (arr) => arr[Math.floor(Math.random()*arr.length)];
+
+  // ------------------------------
+  // m_ttbar histogram (global state)
+  // ------------------------------
+  
+  const mttBins = Array(40).fill(0);
+  
+  function sampleMttbar() {
+    // crude physical shape: broad + peak
+    let m = 350 + rnd(-100, 400);
+    if (Math.random() < 0.2) m += rnd(100, 200);
+    return clamp(m, 300, 1000);
+  }
+  
+  function fillMtt() {
+    const m = sampleMttbar();
+    const bin = Math.floor((m - 300) / 700 * mttBins.length);
+    if (mttBins[bin] !== undefined) mttBins[bin]++;
+  }
+  
+  function drawMtt() {
+    const c = $("mttCanvas");
+    if (!c) return; // safety guard
+    const ctx = c.getContext("2d");
+    ctx.clearRect(0, 0, c.width, c.height);
+  
+    const max = Math.max(...mttBins, 1);
+    mttBins.forEach((v, i) => {
+      const h = (v / max) * c.height;
+      ctx.fillStyle = "#7cb7ff";
+      ctx.fillRect(
+        i * (c.width / mttBins.length),
+        c.height - h,
+        (c.width / mttBins.length) - 1,
+        h
+      );
+    });
+  
+    ctx.fillStyle = "#a7b5ff";
+	ctx.font = "10px monospace";
+	ctx.fillText("300", 2, c.height - 2);
+	ctx.fillText("1000 GeV", c.width - 60, c.height - 2);
+    
+  }
+
+  const JOURNALS = [
+    "Physical Review Letters",
+    "Physical Review D",
+    "Journal of High Energy Physics",
+    "European Physical Journal C",
+    "Physics Letters B"
+  ];
+  
+  const RARE_EVENTS = [
+    {
+  	key: "mttbar_excess",
+  	title: "Excess observed in mₜₜ̄ spectrum",
+  	prob: 0.002,
+  	effect: () => {
+  	  S.discoveries += 3;
+  	  S.data += 500;
+  	}
+    },
+    {
+  	key: "precision_top_mass",
+  	title: "High-precision top-quark mass measurement",
+  	prob: 0.0015,
+  	effect: () => {
+  	  S.papers += 1;
+  	}
+    }
+  ];
+
+  // ------------------------------
+  // Game content: Particles
+  // PDG-style summaries (2025, educational precision)
+  // ------------------------------
+  const PARTICLES = [
+    {
+      key: "electron", name: "Electron (e⁻)", family: "Lepton",
+      unlock: { papers: 0, discoveries: 0 },
+  
+      props: { mass: "0.511 MeV", charge: "−1", spin: "1/2", forces: "EM, Weak" },
+  
+      pdg: {
+        mass: "0.51099895 ± 0.00000015 MeV",
+        width: "stable",
+        lifetime: "stable",
+        charge: "−1",
+        spin: "1/2",
+        interactions: "Electromagnetic, Weak",
+        pdgRef: "PDG 2025 Summary Tables"
+      },
+  
+      blurb: "Electrons are fundamental leptons. They feel electromagnetism and the weak interaction, but not the strong force.",
+      learn: "Leptons carry no color charge → no strong interaction."
+    },
+  
+    {
+      key: "photon", name: "Photon (γ)", family: "Gauge boson",
+      unlock: { papers: 1, discoveries: 0 },
+  
+      props: { mass: "0", charge: "0", spin: "1", forces: "EM mediator" },
+  
+      pdg: {
+        mass: "0",
+        width: "stable",
+        lifetime: "stable",
+        charge: "0",
+        spin: "1",
+        interactions: "Electromagnetic (force carrier)",
+        pdgRef: "PDG 2025 Summary Tables"
+      },
+  
+      blurb: "Photons are quanta of the electromagnetic field and mediate interactions between charged particles.",
+      learn: "Massless gauge bosons generate long-range forces."
+    },
+  
+    {
+      key: "muon", name: "Muon (μ⁻)", family: "Lepton",
+      unlock: { papers: 2, discoveries: 1 },
+  
+      props: { mass: "105.7 MeV", charge: "−1", spin: "1/2", forces: "EM, Weak" },
+  
+      pdg: {
+        mass: "105.6583755 ± 0.0000023 MeV",
+        width: "≈ 3×10⁻¹⁹ GeV",
+        lifetime: "2.1969811 μs",
+        charge: "−1",
+        spin: "1/2",
+        interactions: "Electromagnetic, Weak",
+        pdgRef: "PDG 2025 Summary Tables"
+      },
+  
+      blurb: "Muons are heavier cousins of electrons, produced in cosmic rays and collider interactions.",
+      learn: "Same quantum numbers → same interactions, but heavier mass changes decay behavior."
+    },
+  
+    {
+      key: "neutrino", name: "Neutrino (ν)", family: "Lepton",
+      unlock: { papers: 3, discoveries: 2 },
+  
+      props: { mass: "≪ 1 eV", charge: "0", spin: "1/2", forces: "Weak" },
+  
+      pdg: {
+        mass: "< 1 eV (upper limits)",
+        width: "≈ 0",
+        lifetime: "≫ age of universe",
+        charge: "0",
+        spin: "1/2",
+        interactions: "Weak",
+        pdgRef: "PDG 2025 Summary Tables"
+      },
+  
+      blurb: "Neutrinos interact only via the weak force, making them extremely difficult to detect.",
+      learn: "Neutral + colorless → only weak interaction remains."
+    },
+  
+    {
+      key: "up", name: "Up quark (u)", family: "Quark",
+      unlock: { papers: 4, discoveries: 3 },
+  
+      props: { mass: "~2.2 MeV", charge: "+2/3", spin: "1/2", forces: "Strong, EM, Weak" },
+  
+      pdg: {
+        mass: "2.16 ± 0.49 MeV",
+        width: "confined",
+        lifetime: "confined",
+        charge: "+2/3",
+        spin: "1/2",
+        interactions: "Strong, Electromagnetic, Weak",
+        pdgRef: "PDG 2025 Summary Tables"
+      },
+  
+      blurb: "Up quarks are constituents of protons and neutrons and carry color charge.",
+      learn: "Color charge → confinement inside hadrons."
+    },
+  
+    {
+      key: "down", name: "Down quark (d)", family: "Quark",
+      unlock: { papers: 5, discoveries: 4 },
+  
+      props: { mass: "~4.7 MeV", charge: "−1/3", spin: "1/2", forces: "Strong, EM, Weak" },
+  
+      pdg: {
+        mass: "4.67 ± 0.48 MeV",
+        width: "confined",
+        lifetime: "confined",
+        charge: "−1/3",
+        spin: "1/2",
+        interactions: "Strong, Electromagnetic, Weak",
+        pdgRef: "PDG 2025 Summary Tables"
+      },
+  
+      blurb: "Down quarks partner with up quarks to form nucleons.",
+      learn: "Quarks are never observed free at low energies."
+    },
+  
+    {
+      key: "gluon", name: "Gluon (g)", family: "Gauge boson",
+      unlock: { papers: 7, discoveries: 6 },
+  
+      props: { mass: "0", charge: "0", spin: "1", forces: "Strong mediator" },
+  
+      pdg: {
+        mass: "0",
+        width: "confined",
+        lifetime: "confined",
+        charge: "0",
+        spin: "1",
+        interactions: "Strong (self-interacting)",
+        pdgRef: "PDG 2025 Summary Tables"
+      },
+  
+      blurb: "Gluons mediate the strong force and carry color charge themselves.",
+      learn: "Non-Abelian gauge theory → self-interactions."
+    },
+  
+    {
+      key: "w", name: "W boson (W±)", family: "Gauge boson",
+      unlock: { papers: 9, discoveries: 8 },
+  
+      props: { mass: "80.4 GeV", charge: "±1", spin: "1", forces: "Weak mediator" },
+  
+      pdg: {
+        mass: "80.377 ± 0.012 GeV",
+        width: "2.085 GeV",
+        lifetime: "≈ 3×10⁻²⁵ s",
+        charge: "±1",
+        spin: "1",
+        interactions: "Weak (charged current)",
+        pdgRef: "PDG 2025 Summary Tables"
+      },
+  
+      blurb: "W bosons mediate charged weak interactions such as beta decay.",
+      learn: "Massive mediators → short-range forces."
+    },
+  
+    {
+      key: "z", name: "Z boson (Z⁰)", family: "Gauge boson",
+      unlock: { papers: 11, discoveries: 10 },
+  
+      props: { mass: "91.2 GeV", charge: "0", spin: "1", forces: "Weak mediator" },
+  
+      pdg: {
+        mass: "91.1876 ± 0.0021 GeV",
+        width: "2.4952 GeV",
+        lifetime: "≈ 3×10⁻²⁵ s",
+        charge: "0",
+        spin: "1",
+        interactions: "Weak (neutral current)",
+        pdgRef: "PDG 2025 Summary Tables"
+      },
+  
+      blurb: "Z bosons mediate neutral weak interactions and were discovered via resonance peaks.",
+      learn: "Precision measurements test the Standard Model."
+    },
+  
+    {
+      key: "higgs", name: "Higgs boson (H)", family: "Scalar",
+      unlock: { papers: 14, discoveries: 13 },
+  
+      props: { mass: "125.25 GeV", charge: "0", spin: "0", forces: "Mass coupling" },
+  
+      pdg: {
+        mass: "125.25 ± 0.17 GeV",
+        width: "≈ 4.1 MeV",
+        lifetime: "≈ 1.6×10⁻²² s",
+        charge: "0",
+        spin: "0",
+        interactions: "Yukawa / Electroweak symmetry breaking",
+        pdgRef: "PDG 2025 Summary Tables"
+      },
+  
+      blurb: "The Higgs boson is an excitation of the Higgs field responsible for mass generation.",
+      learn: "Scalar field → spontaneous symmetry breaking."
+    },
+  
+    {
+      key: "top", name: "Top quark (t)", family: "Quark",
+      unlock: { papers: 18, discoveries: 18 },
+  
+      props: { mass: "172.7 GeV", charge: "+2/3", spin: "1/2", forces: "Strong, EM, Weak" },
+  
+      pdg: {
+        mass: "172.76 ± 0.30 GeV",
+        width: "1.41 GeV",
+        lifetime: "≈ 5×10⁻²⁵ s",
+        charge: "+2/3",
+        spin: "1/2",
+        interactions: "Strong, Electromagnetic, Weak",
+        pdgRef: "PDG 2025 Summary Tables"
+      },
+  
+      blurb: "The top quark is the heaviest known quark and decays before hadronizing.",
+      learn: "Short lifetime preserves spin information."
+    }
+  ];
+
+
+  // ------------------------------
+  // Upgrades
+  // ------------------------------
+  const UPGRADES = [
+    {
+      key:"better_triggers",
+      name:"Better Triggers",
+      desc:"Increase Data per click. (More events recorded per experiment.)",
+      baseCost: 25,
+      growth: 1.18,
+      type:"dpc",
+      effectPerLevel: 1,
+      max: 200
+    },
+    {
+      key:"detector_calibration",
+      name:"Detector Calibration",
+      desc:"Increase discovery chance. (Sharper peaks, better resolution.)",
+      baseCost: 60,
+      growth: 1.22,
+      type:"disc",
+      effectPerLevel: 0.004, // +0.4% per level
+      max: 100
+    },
+    {
+      key:"analysis_farm",
+      name:"Analysis Farm",
+      desc:"Generate Data per second automatically. (Compute + pipelines.)",
+      baseCost: 150,
+      growth: 1.25,
+      type:"dps",
+      effectPerLevel: 1.0, // +1 Data/s per level
+      max: 200
+    },
+    {
+      key:"accelerator_energy",
+      name:"Higher Beam Energy",
+      desc:"Boost all Data gains. (Higher √s unlocks heavy states.)",
+      baseCost: 500,
+      growth: 1.35,
+      type:"mult",
+      effectPerLevel: 0.08, // +8% multiplier per level
+      max: 60
+    },
+    {
+      key:"collaboration",
+      name:"International Collaboration",
+      desc:"Paper costs scale slower and prestige yields improve.",
+      baseCost: 900,
+      growth: 1.33,
+      type:"collab",
+      effectPerLevel: 0.03,
+      max: 80
+    },
+  ];
+
+  // ------------------------------
+  // Quiz bank
+  // ------------------------------
+  const QUIZZES = [
+    {
+      q:"Which interaction does a neutrino primarily experience?",
+      a:["Strong","Electromagnetic","Weak","None"],
+      correct:2,
+      hint:"Neutrinos are neutral and colorless."
+    },
+    {
+      q:"Which particle carries color charge and feels the strong force?",
+      a:["Electron","Up quark","Photon","Neutrino"],
+      correct:1,
+      hint:"Quarks have color charge."
+    },
+    {
+      q:"What is the spin of the photon?",
+      a:["0","1/2","1","2"],
+      correct:2,
+      hint:"It’s a gauge boson of electromagnetism."
+    },
+    {
+      q:"Which boson mediates the strong interaction?",
+      a:["Gluon","Z boson","Photon","Higgs"],
+      correct:0,
+      hint:"It binds quarks inside hadrons."
+    },
+    {
+      q:"Why is the weak force short-range compared to electromagnetism?",
+      a:["It has fewer particles","Its bosons are massive","It is weaker","It violates parity"],
+      correct:1,
+      hint:"Range ~ 1/mass of mediator (roughly)."
+    }
+  ];
+
+  // ------------------------------
+  // Game state
+  // ------------------------------
+  const DEFAULT = () => ({
+    data: 0,
+    papers: 0,
+    prestige: 0,
+    discoveries: 0,
+    unlocked: { electron: true }, // start with electron visible/unlocked
+    upgrades: Object.fromEntries(UPGRADES.map(u => [u.key, 0])),
+    lastTick: now(),
+    log: [],
+    quiz: null,     // active quiz object
+    quizCooldown: 0,  // clicks until next quiz can appear
+	notes: []
+  });
+
+  let S = load() ?? DEFAULT();
+  if (S.notes?.length) {
+    for (const n of S.notes) {
+      pushLog(`📄 ${n.title} (${n.journal})`);
+    }
+  }
+
+  // ------------------------------
+  // Derived stats
+  // ------------------------------
+  function multFromPrestige() {
+    // Each prestige adds +5% baseline
+    return 1 + 0.05 * S.prestige;
+  }
+  function level(k) { return S.upgrades[k] || 0; }
+
+  function globalMult() {
+    const beam = 1 + 0.08 * level("accelerator_energy");
+    return multFromPrestige() * beam;
+  }
+
+  function dataPerClick() {
+    const base = 1 + level("better_triggers") * 1;
+    return base * globalMult();
+  }
+
+  function dataPerSecond() {
+    const farm = level("analysis_farm") * 1.0;
+    return farm * globalMult();
+  }
+
+  function discoveryChancePerClick() {
+    // base 0.2% + calibration improvements + papers synergy
+    const base = 0.002;
+    const cal = level("detector_calibration") * 0.004;
+    const paperBoost = Math.min(0.0015 * Math.sqrt(S.papers), 0.02); // up to +2%
+    return clamp(base + cal + paperBoost, 0, 0.20); // cap at 20%/click
+  }
+
+  function paperCost() {
+    // Base grows with papers; collaboration reduces growth slightly
+    const c = level("collaboration") * 0.03; // up to 2.4 at lvl 80 but we'll clamp effect
+    const slow = clamp(1 - 0.25 * c, 0.55, 1.0); // reduce scaling up to 45%
+    const base = 100;
+    const growth = 1.35 * slow;
+    return Math.floor(base * Math.pow(growth, S.papers));
+  }
+
+  function prestigeGainIfReset() {
+    // Gain ~ sqrt(papers) * (1 + collaboration effect)
+    const c = 1 + 0.03 * level("collaboration");
+    const g = Math.floor(Math.sqrt(S.papers) * c);
+    return Math.max(0, g);
+  }
+  
+  function triggerRareEvent(evt) {
+    const journal = pick(JOURNALS);
+    evt.effect();
+  
+    const note = {
+      time: new Date().toISOString(),
+      title: evt.title,
+      journal,
+      text: ""
+    };
+  
+    S.notes.push(note);
+  
+    showModal(
+      "Rare Event!",
+      `${evt.title}\n\nPaper submitted to: ${journal}\n\nWrite your analysis note below.`,
+      ""
+    );
+  
+    const textarea = document.createElement("textarea");
+    textarea.style.width = "100%";
+    textarea.style.height = "120px";
+    textarea.placeholder = "Describe the observation, uncertainties, interpretation…";
+  
+    $("modalBody").appendChild(textarea);
+  
+    const saveBtn = document.createElement("button");
+    saveBtn.className = "btn small";
+    saveBtn.textContent = "Save Note";
+    saveBtn.onclick = () => {
+      note.text = textarea.value;
+      hideModal();
+      pushLog(`📄 ${evt.title} (${journal})`);
+      save();
+    };
+  
+    $("modalBody").appendChild(saveBtn);
+  }
+  
+
+  // ------------------------------
+  // UI builders
+  // ------------------------------
+  function renderUpgrades() {
+    const box = $("upgradeList");
+    box.innerHTML = "";
+    for (const u of UPGRADES) {
+      const lvl = level(u.key);
+      const cost = Math.floor(u.baseCost * Math.pow(u.growth, lvl));
+      const can = S.data >= cost && lvl < u.max;
+
+      const el = document.createElement("div");
+      el.className = "card";
+      el.innerHTML = `
+        <div class="cardhead">
+          <div>
+            <div class="cardtitle">${u.name} <span class="badge">Lv ${lvl}</span></div>
+            <div class="cardmeta">${u.desc}</div>
+          </div>
+          <div class="row" style="justify-content:flex-end;">
+            <div class="price">${fmt(cost)} Data</div>
+            <button class="btn small" ${can ? "" : "disabled"}>${lvl>=u.max ? "Maxed" : "Buy"}</button>
+          </div>
+        </div>
+      `;
+      const btn = el.querySelector("button");
+      btn.addEventListener("click", () => {
+        buyUpgrade(u.key);
+      });
+      box.appendChild(el);
+    }
+  }
+
+  function renderParticles() {
+    const grid = $("particleGrid");
+    grid.innerHTML = "";
+    for (const p of PARTICLES) {
+      const unlocked = !!S.unlocked[p.key];
+      const meets = (S.papers >= p.unlock.papers) && (S.discoveries >= p.unlock.discoveries);
+
+      const el = document.createElement("div");
+      el.className = "particle" + (unlocked ? "" : " locked");
+
+      const status = unlocked ? "Unlocked" : (meets ? "Ready to discover" : "Locked");
+      const badgeColor = unlocked ? "var(--accent)" : (meets ? "var(--gold)" : "var(--muted)");
+
+      el.innerHTML = `
+        <div class="tooltip" title="More info">?</div>
+        <div class="pname">
+          ${p.name}
+          <span class="badge" style="border-color:${badgeColor};">${status}</span>
+          <span class="badge">${p.family}</span>
+        </div>
+        <div class="props">
+          <div>mass: ${unlocked ? p.props.mass : "??"}</div>
+          <div>charge: ${unlocked ? p.props.charge : "??"}</div>
+          <div>spin: ${unlocked ? p.props.spin : "??"}</div>
+          <div>forces: ${unlocked ? p.props.forces : "??"}</div>
+        </div>
+        <div class="carddesc" style="margin-top:8px;">
+          ${unlocked ? p.blurb : `Requirements: papers ≥ <span class="mono">${p.unlock.papers}</span>,
+          discoveries ≥ <span class="mono">${p.unlock.discoveries}</span>.`}
+        </div>
+      `;
+
+	  if (unlocked) {
+	    el.style.cursor = "pointer";
+	    el.addEventListener("click", (e) => {
+	  	// don't hijack clicks on the tooltip "?"
+	  	if (e.target && e.target.classList.contains("tooltip")) return;
+			showParticlePage(p);
+	    });
+	  }
+
+      el.querySelector(".tooltip").addEventListener("click", () => {
+        showModal(
+          p.name,
+          unlocked
+            ? `${p.blurb}\n\nWhat to learn: ${p.learn}`
+            : `This entry is locked.\n\nTo unlock: papers ≥ ${p.unlock.papers}, discoveries ≥ ${p.unlock.discoveries}.\n\nTip: improve discovery chance with Detector Calibration. Publish Papers to unlock heavier particles.`,
+          unlocked ? `Properties: mass=${p.props.mass}, charge=${p.props.charge}, spin=${p.props.spin}, forces=${p.props.forces}` : ""
+        );
+      });
+
+      grid.appendChild(el);
+    }
+  }
+
+  function showParticlePage(p) {
+    // hide main grid, show particle page
+    $("pageParticle").style.display = "block";
+    document.querySelector(".grid").style.display = "none";
+  
+    const box = $("particleDetail");
+    box.innerHTML = `
+      <div class="card">
+        <div class="cardtitle">${p.name}</div>
+        <div class="cardmeta">${p.family}</div>
+        <div class="hr"></div>
+  
+        <div class="carddesc"><b>Blurb:</b> ${p.blurb}</div>
+        <div class="carddesc"><b>What to learn:</b> ${p.learn}</div>
+  
+        <div class="hr"></div>
+  
+        <div class="cardtitle">PDG-style properties (PDG 2025)</div>
+        <div class="carddesc mono" style="line-height:1.6;">
+          mass: ${p.pdg?.mass ?? "N/A"}<br/>
+          width: ${p.pdg?.width ?? "N/A"}<br/>
+          lifetime: ${p.pdg?.lifetime ?? "N/A"}<br/>
+          charge: ${p.pdg?.charge ?? "N/A"}<br/>
+          spin: ${p.pdg?.spin ?? "N/A"}<br/>
+          interactions: ${p.pdg?.interactions ?? "N/A"}<br/>
+          reference: ${p.pdg?.pdgRef ?? "N/A"}<br/>
+        </div>
+      </div>
+    `;
+  
+    // update hash for simple navigation
+    location.hash = `particle=${encodeURIComponent(p.key)}`;
+  }
+  
+  function backToIndex() {
+    $("pageParticle").style.display = "none";
+    document.querySelector(".grid").style.display = "";
+    $("particleDetail").innerHTML = "";
+    location.hash = "";
+  }
+  
+  $("btnBack").addEventListener("click", backToIndex);
+  
+  // If user refreshes on a particle hash
+  window.addEventListener("hashchange", () => {
+    const m = location.hash.match(/^#particle=(.*)$/);
+    if (!m) return backToIndex();
+    const key = decodeURIComponent(m[1]);
+    const p = PARTICLES.find(x => x.key === key);
+    if (!p) return backToIndex();
+	if (!S.unlocked?.[p.key]) {
+	  toast("Particle not unlocked yet");
+	  return backToIndex();
+	}
+	showParticlePage(p);
+
+  });
+
+  function renderStats() {
+    $("data").textContent = fmt(S.data);
+    $("papers").textContent = fmt(S.papers);
+    $("prestige").textContent = fmt(S.prestige);
+
+    $("dpc").textContent = fmt(dataPerClick());
+    $("dps").textContent = fmt(dataPerSecond());
+    $("discChance").textContent = (discoveryChancePerClick() * 100).toFixed(1) + "%";
+    $("paperCost").textContent = fmt(paperCost());
+
+    // Buttons
+    $("btnPublish").disabled = S.data < paperCost();
+    const pg = prestigeGainIfReset();
+    $("btnPrestige").disabled = pg <= 0 || S.papers < 5;
+    $("btnPrestige").textContent = pg > 0 ? `Prestige (gain +${pg})` : "Prestige (Reset for bonus)";
+  }
+
+  function pushLog(msg) {
+    const t = new Date().toLocaleTimeString([], {hour:"2-digit", minute:"2-digit", second:"2-digit"});
+    S.log.unshift({t, msg});
+    if (S.log.length > 80) S.log.length = 80;
+    renderLog();
+  }
+
+  function renderLog() {
+    const box = $("log");
+    box.innerHTML = S.log.map(e => `
+      <div class="entry"><div class="t">${e.t}</div><div class="m">${e.msg}</div></div>
+    `).join("");
+  }
+
+  function toast(msg) {
+    const el = $("toast");
+    el.textContent = msg;
+    el.style.display = "block";
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => { el.style.display = "none"; }, 1700);
+  }
+
+  // ------------------------------
+  // Modal
+  // ------------------------------
+  function showModal(title, body, foot="") {
+    $("modalTitle").textContent = title;
+    const mb = $("modalBody");
+    mb.innerHTML = "";
+    const pre = document.createElement("pre");
+    pre.style.whiteSpace = "pre-wrap";
+    pre.style.margin = "0 0 10px";
+    pre.style.color = "#dbe5ff";
+    pre.textContent = body;
+    mb.appendChild(pre);
+  
+    $("modalFoot").textContent = foot;
+    $("modalBg").style.display = "flex";
+  }
+
+  function hideModal() { $("modalBg").style.display = "none"; }
+
+  $("modalClose").addEventListener("click", hideModal);
+  $("modalBg").addEventListener("click", (e) => { if (e.target === $("modalBg")) hideModal(); });
+
+  // ------------------------------
+  // Core actions
+  // ------------------------------
+  function tick(dtSec) {
+    // passive Data
+    const add = dataPerSecond() * dtSec;
+    if (add > 0) S.data += add;
+  }
+
+  function runExperiment() {
+    const gain = dataPerClick();
+    S.data += gain;
+
+	fillMtt();
+	drawMtt();
+
+    // quiz spawn logic
+    if (!S.quiz && S.quizCooldown <= 0) {
+      // chance grows slowly with papers
+      const qChance = clamp(0.03 + 0.002 * Math.sqrt(S.papers), 0.03, 0.12);
+      if (Math.random() < qChance) {
+        spawnQuiz();
+      } else {
+        S.quizCooldown = 8; // avoid checking every click
+      }
+    } else if (S.quizCooldown > 0) {
+      S.quizCooldown--;
+    }
+
+    // discovery attempt
+    const pDisc = discoveryChancePerClick();
+    if (Math.random() < pDisc) {
+      discoverSomething();
+    }
+	
+	const roll = Math.random();
+	let acc = 0;
+	for (const evt of RARE_EVENTS) {
+		acc += evt.prob;
+		if (roll < acc) {
+			triggerRareEvent(evt);
+			break;
+		}
+	}
+
+    renderStats();
+    renderUpgrades();
+  }
+
+  function discoverSomething() {
+    // find discoverable particles not yet unlocked, whose reqs are met
+    const candidates = PARTICLES.filter(p =>
+      !S.unlocked[p.key] &&
+      (S.papers >= p.unlock.papers) &&
+      (S.discoveries >= p.unlock.discoveries)
+    );
+
+    // if none, still award "measurement insight"
+    if (candidates.length === 0) {
+      S.discoveries += 1;
+      const bonus = 10 * globalMult();
+      S.data += bonus;
+      pushLog(`You improved your measurements (+${fmt(bonus)} Data) and gained a discovery insight. Total discoveries: <span class="mono">${S.discoveries}</span>.`);
+      toast("Measurement improved!");
+      renderParticles();
+      return;
+    }
+
+    // weighted: prefer lighter first
+    const p = candidates[0];
+    S.unlocked[p.key] = true;
+    S.discoveries += 1;
+
+    pushLog(`Discovery! You unlocked <b>${p.name}</b>. Learn: <span class="mono">${p.props.charge}</span> charge, spin <span class="mono">${p.props.spin}</span>, forces: <span class="mono">${p.props.forces}</span>.`);
+    toast(`Unlocked: ${p.name}`);
+    renderParticles();
+  }
+
+  function publishPaper() {
+    const cost = paperCost();
+    if (S.data < cost) return;
+    S.data -= cost;
+    S.papers += 1;
+
+    // publishing gives a little “institutional” bonus
+    const bonus = Math.floor((15 + 2*S.papers) * globalMult());
+    S.data += bonus;
+
+    pushLog(`Paper published! (+1 Paper). Peer recognition awarded +${fmt(bonus)} Data.`);
+    toast("Paper published");
+    renderStats();
+    renderParticles();
+    renderUpgrades();
+  }
+
+  function buyUpgrade(key) {
+    const u = UPGRADES.find(x => x.key === key);
+    if (!u) return;
+    const lvl = level(key);
+    if (lvl >= u.max) return;
+    const cost = Math.floor(u.baseCost * Math.pow(u.growth, lvl));
+    if (S.data < cost) return;
+
+    S.data -= cost;
+    S.upgrades[key] = lvl + 1;
+
+    // some upgrades influence “meta”
+    if (key === "collaboration") {
+      pushLog(`You built a stronger collaboration network. Future papers become more efficient and prestige yields improve.`);
+    } else {
+      pushLog(`Upgrade purchased: <b>${u.name}</b> → level ${lvl+1}.`);
+    }
+    toast(`Bought: ${u.name}`);
+    renderStats();
+    renderUpgrades();
+  }
+
+  function prestigeReset() {
+    const gain = prestigeGainIfReset();
+    if (gain <= 0 || S.papers < 5) return;
+
+    const keep = {
+      prestige: S.prestige + gain
+    };
+    const oldPrestige = keep.prestige;
+
+    S = DEFAULT();
+    S.prestige = oldPrestige;
+	mttBins.fill(0);
+	drawMtt();
+
+    pushLog(`Prestige achieved! You reset your lab but gained +${gain} Prestige. All Data gains are permanently boosted.`);
+    toast(`Prestige +${gain}`);
+    renderAll();
+    save();
+  }
+
+  // ------------------------------
+  // Quiz
+  // ------------------------------
+  function spawnQuiz() {
+    const q = pick(QUIZZES);
+    // clone + add payout
+    const payout = Math.floor((60 + 12*Math.sqrt(S.papers)) * globalMult());
+    S.quiz = { ...q, payout };
+    renderQuiz();
+    pushLog(`A collaborator asks a quick theory question. Answer it for bonus Data.`);
+  }
+
+  function renderQuiz() {
+    const qb = $("quizBox");
+    if (!S.quiz) { qb.style.display = "none"; return; }
+    qb.style.display = "block";
+    $("quizQ").textContent = S.quiz.q;
+    $("quizHint").textContent = "Hint: " + S.quiz.hint + `  • Reward: +${fmt(S.quiz.payout)} Data`;
+    const aBox = $("quizA");
+    aBox.innerHTML = "";
+    S.quiz.a.forEach((ans, idx) => {
+      const b = document.createElement("button");
+      b.className = "btn small";
+      b.textContent = ans;
+      b.addEventListener("click", () => answerQuiz(idx));
+      aBox.appendChild(b);
+    });
+  }
+
+  function answerQuiz(choiceIdx) {
+    if (!S.quiz) return;
+    const correct = (choiceIdx === S.quiz.correct);
+    if (correct) {
+      S.data += S.quiz.payout;
+      pushLog(`Quiz correct ✅ You earned +${fmt(S.quiz.payout)} Data.`);
+      toast("Correct! Bonus Data");
+    } else {
+      const consolation = Math.floor(S.quiz.payout * 0.15);
+      S.data += consolation;
+      pushLog(`Quiz incorrect ❌ You still gained +${fmt(consolation)} Data for trying. Correct answer: <span class="mono">${S.quiz.a[S.quiz.correct]}</span>.`);
+      toast("Not quite — keep going");
+    }
+    S.quiz = null;
+    S.quizCooldown = 15;
+    renderQuiz();
+    renderStats();
+    renderUpgrades();
+  }
+
+  $("btnSkipQuiz").addEventListener("click", () => {
+    if (!S.quiz) return;
+    pushLog(`You skipped the quiz. (No bonus.)`);
+    S.quiz = null;
+    S.quizCooldown = 20;
+    renderQuiz();
+  });
+
+  // ------------------------------
+  // Save/load
+  // ------------------------------
+  function save() {
+    S.lastTick = now();
+    localStorage.setItem("particle_idle_save_v1", JSON.stringify(S));
+    toast("Saved");
+  }
+  function load() {
+    try {
+      const raw = localStorage.getItem("particle_idle_save_v1");
+      if (!raw) return null;
+      const obj = JSON.parse(raw);
+      return obj;
+    } catch { return null; }
+  }
+
+  function hardReset() {
+    if (!confirm("Hard reset will erase your save. Continue?")) return;
+    localStorage.removeItem("particle_idle_save_v1");
+    S = DEFAULT();
+    renderAll();
+    toast("Reset complete");
+  }
+
+  // ------------------------------
+  // Wiring
+  // ------------------------------
+  $("btnExperiment").addEventListener("click", runExperiment);
+  $("btnPublish").addEventListener("click", publishPaper);
+  $("btnPrestige").addEventListener("click", prestigeReset);
+  $("btnSave").addEventListener("click", save);
+  $("btnReset").addEventListener("click", hardReset);
+
+  // ------------------------------
+  // Main loop
+  // ------------------------------
+  function simulateOffline() {
+    // Give a small offline catch-up, capped
+    const t = now();
+    const last = S.lastTick || t;
+    const dt = clamp((t - last) / 1000, 0, 6*60*60); // cap 6 hours
+    if (dt > 1) {
+      const earned = dataPerSecond() * dt;
+      if (earned > 0) {
+        S.data += earned;
+        pushLog(`Offline progress: +${fmt(earned)} Data collected while you were away (${Math.floor(dt)}s).`);
+      }
+    }
+    S.lastTick = t;
+  }
+
+  let last = now();
+  function loop() {
+    const t = now();
+    const dt = (t - last) / 1000;
+    last = t;
+    tick(dt);
+    renderStats();
+    requestAnimationFrame(loop);
+  }
+
+  // ------------------------------
+  // Initial render
+  // ------------------------------
+  function renderAll() {
+    renderStats();
+    renderUpgrades();
+    renderParticles();
+    renderLog();
+    renderQuiz();
+  }
+
+  simulateOffline();
+  renderAll();
+  drawMtt();
+  loop();
+
+  // Autosave every 30s
+  setInterval(save, 30000);
+
+  // Initial guidance
+  if (!S.log || S.log.length === 0) {
+    pushLog(`Welcome! Click <b>Run Experiment</b> to earn Data. Publish Papers to unlock heavy particles. Upgrade Calibration to improve discovery chance.`);
+    pushLog(`Physics tip: charged particles feel <span class="mono">electromagnetism</span>; color-charged particles feel the <span class="mono">strong force</span>.`);
+  }
+})();
+</script>
 </body>
 </html>
