@@ -1,4 +1,4 @@
-# slider
+# Developer's notes
 
-A Pen created on CodePen.io. Original URL: [https://codepen.io/alberblk/pen/jOPzqmq](https://codepen.io/alberblk/pen/jOPzqmq).
+Currently the main page is a particle physics idle lab html game. 
 
