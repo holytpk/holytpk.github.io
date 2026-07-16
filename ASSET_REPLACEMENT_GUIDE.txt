@@ -1,22 +1,19 @@
-Replace these files whenever your final artwork is ready:
+Official site assets
 
+Crypto icons:
 assets/crypto/btc.png
 assets/crypto/eth.png
 assets/crypto/solana.png
 assets/crypto/monad.png
 assets/crypto/bnb.png
 assets/crypto/tron.png
+
+Character:
 assets/characters/unipeg.png
 
-Optional already-integrated media:
+Media:
 assets/media/btfu-logo.jpg
 assets/media/intro.mp4
 
-Recommended image format:
-- PNG or WebP
-- square crypto images, ideally 800x800 or larger
-- transparent PNG for unipeg
-- keep the exact filenames above
-
-The page automatically falls back to the generated SVG placeholders when a
-PNG is absent.
+The site no longer shows placeholder wording. If unipeg.png is absent, a clean
+built-in pixel mascot is used automatically.

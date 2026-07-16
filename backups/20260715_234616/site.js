@@ -1,4 +1,5 @@
 (() => {
+  const panelSelector = ".tab-panel";
   const buttons = [...document.querySelectorAll("[data-tab]")];
   const links = [...document.querySelectorAll("[data-tab-link]")];
   const menu = document.querySelector(".site-nav");
@@ -6,24 +7,25 @@
   let active = "home";
   let switching = false;
 
-  const panel = name => document.querySelector(`.tab-panel[data-panel="${name}"]`);
+  function getPanel(name) {
+    return document.querySelector(`${panelSelector}[data-panel="${name}"]`);
+  }
 
   function activate(name, updateHash = true) {
-    if (switching || !panel(name)) return;
-    if (name === active) {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+    if (switching || name === active || !getPanel(name)) {
+      if (name === active) window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
 
     switching = true;
-    const oldPanel = panel(active);
-    const newPanel = panel(name);
+    const oldPanel = getPanel(active);
+    const newPanel = getPanel(name);
 
     oldPanel.style.transition = "opacity .22s ease, transform .22s ease";
     oldPanel.style.opacity = "0";
     oldPanel.style.transform = "translateY(-10px)";
 
-    setTimeout(() => {
+    window.setTimeout(() => {
       oldPanel.hidden = true;
       oldPanel.classList.remove("is-active");
       oldPanel.removeAttribute("style");
@@ -32,45 +34,43 @@
       requestAnimationFrame(() => newPanel.classList.add("is-active"));
 
       active = name;
-      buttons.forEach(button =>
-        button.classList.toggle("is-active", button.dataset.tab === name)
-      );
+      buttons.forEach(btn => btn.classList.toggle("is-active", btn.dataset.tab === name));
 
       if (updateHash) history.replaceState(null, "", `#${name}`);
       window.scrollTo({ top: 0, behavior: "smooth" });
       menu?.classList.remove("is-open");
       menuButton?.setAttribute("aria-expanded", "false");
 
-      setTimeout(() => { switching = false; }, 560);
+      window.setTimeout(() => { switching = false; }, 560);
     }, 220);
   }
 
-  buttons.forEach(button =>
-    button.addEventListener("click", () => activate(button.dataset.tab))
-  );
+  buttons.forEach(button => {
+    button.addEventListener("click", () => activate(button.dataset.tab));
+  });
 
-  links.forEach(link =>
+  links.forEach(link => {
     link.addEventListener("click", event => {
       event.preventDefault();
       activate(link.dataset.tabLink);
-    })
-  );
+    });
+  });
 
   menuButton?.addEventListener("click", () => {
-    const open = menu.classList.toggle("is-open");
-    menuButton.setAttribute("aria-expanded", String(open));
+    const isOpen = menu.classList.toggle("is-open");
+    menuButton.setAttribute("aria-expanded", String(isOpen));
   });
 
   const initial = location.hash.slice(1);
-  if (initial && panel(initial)) {
-    panel("home").hidden = true;
-    panel("home").classList.remove("is-active");
-    panel(initial).hidden = false;
-    panel(initial).classList.add("is-active");
+  if (initial && getPanel(initial)) {
+    const home = getPanel("home");
+    home.hidden = true;
+    home.classList.remove("is-active");
+    const target = getPanel(initial);
+    target.hidden = false;
+    target.classList.add("is-active");
     active = initial;
-    buttons.forEach(button =>
-      button.classList.toggle("is-active", button.dataset.tab === initial)
-    );
+    buttons.forEach(btn => btn.classList.toggle("is-active", btn.dataset.tab === initial));
   }
 
   document.getElementById("year").textContent = new Date().getFullYear();

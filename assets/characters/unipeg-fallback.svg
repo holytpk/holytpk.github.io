@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="720" viewBox="0 0 720 720">
+  <defs>
+    <linearGradient id="wing" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8eeaff"/>
+      <stop offset=".5" stop-color="#c69cff"/>
+      <stop offset="1" stop-color="#ff93c7"/>
+    </linearGradient>
+  </defs>
+  <rect width="720" height="720" rx="88" fill="#0b0b0b"/>
+  <g shape-rendering="crispEdges">
+    <rect x="300" y="70" width="40" height="130" fill="#f1ca4a"/>
+    <rect x="340" y="30" width="40" height="170" fill="#fff4bf"/>
+    <rect x="380" y="70" width="40" height="130" fill="#f1ca4a"/>
+    <rect x="240" y="200" width="240" height="40" fill="#fff"/>
+    <rect x="200" y="240" width="320" height="40" fill="#fff"/>
+    <rect x="160" y="280" width="400" height="120" fill="#fff"/>
+    <rect x="200" y="400" width="320" height="80" fill="#fff"/>
+    <rect x="240" y="480" width="240" height="80" fill="#fff"/>
+    <rect x="280" y="560" width="64" height="80" fill="#fff"/>
+    <rect x="376" y="560" width="64" height="80" fill="#fff"/>
+    <rect x="200" y="280" width="80" height="80" fill="#ff93c7"/>
+    <rect x="440" y="280" width="80" height="80" fill="#ff93c7"/>
+    <rect x="280" y="300" width="40" height="40" fill="#111"/>
+    <rect x="400" y="300" width="40" height="40" fill="#111"/>
+    <rect x="320" y="380" width="80" height="40" fill="#efb3ca"/>
+    <path d="M160 250 L40 160 L120 360 Z" fill="url(#wing)"/>
+    <path d="M560 250 L680 160 L600 360 Z" fill="url(#wing)"/>
+  </g>
+</svg>
