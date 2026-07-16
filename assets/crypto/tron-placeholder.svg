@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="640" viewBox="0 0 640 640">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#171717"/>
+      <stop offset="1" stop-color="#050505"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="640" height="640" rx="72" fill="url(#bg)"/>
+  <rect x="24" y="24" width="592" height="592" rx="56" fill="none" stroke="#f4cf54" stroke-width="8" stroke-dasharray="20 14"/>
+  <circle cx="320" cy="278" r="164" fill="#f4cf54" opacity=".14"/>
+  <circle cx="320" cy="278" r="144" fill="none" stroke="#f4cf54" stroke-width="18" filter="url(#glow)"/>
+  <text x="320" y="326" text-anchor="middle" fill="#fff5c2" font-family="monospace" font-size="112" font-weight="900">TRX</text>
+  <text x="320" y="500" text-anchor="middle" fill="#f4cf54" font-family="monospace" font-size="28">TRON</text>
+  <text x="320" y="550" text-anchor="middle" fill="#999" font-family="monospace" font-size="19">REPLACE WITH PNG LATER</text>
+</svg>

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="720" viewBox="0 0 720 720">
+  <rect width="720" height="720" rx="80" fill="#0a0a0a"/>
+  <g shape-rendering="crispEdges">
+    <rect x="300" y="80" width="40" height="120" fill="#ffd95b"/>
+    <rect x="340" y="40" width="40" height="160" fill="#fff3bc"/>
+    <rect x="380" y="80" width="40" height="120" fill="#ffd95b"/>
+    <rect x="240" y="200" width="240" height="40" fill="#fff"/>
+    <rect x="200" y="240" width="320" height="40" fill="#fff"/>
+    <rect x="160" y="280" width="400" height="120" fill="#fff"/>
+    <rect x="200" y="400" width="320" height="80" fill="#fff"/>
+    <rect x="240" y="480" width="240" height="80" fill="#fff"/>
+    <rect x="280" y="560" width="64" height="80" fill="#fff"/>
+    <rect x="376" y="560" width="64" height="80" fill="#fff"/>
+    <rect x="200" y="280" width="80" height="80" fill="#ff8fc4"/>
+    <rect x="440" y="280" width="80" height="80" fill="#ff8fc4"/>
+    <rect x="280" y="300" width="40" height="40" fill="#111"/>
+    <rect x="400" y="300" width="40" height="40" fill="#111"/>
+    <rect x="320" y="380" width="80" height="40" fill="#f0b9cf"/>
+    <rect x="120" y="240" width="80" height="40" fill="#ffe564"/>
+    <rect x="80" y="200" width="80" height="40" fill="#8be9ff"/>
+    <rect x="40" y="160" width="80" height="40" fill="#c69cff"/>
+  </g>
+  <text x="360" y="690" text-anchor="middle" fill="#f4cf54" font-family="monospace" font-size="24">UNIPEG PLACEHOLDER</text>
+</svg>

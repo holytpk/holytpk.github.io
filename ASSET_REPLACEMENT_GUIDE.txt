@@ -1,0 +1,22 @@
+Replace these files whenever your final artwork is ready:
+
+assets/crypto/btc.png
+assets/crypto/eth.png
+assets/crypto/solana.png
+assets/crypto/monad.png
+assets/crypto/bnb.png
+assets/crypto/tron.png
+assets/characters/unipeg.png
+
+Optional already-integrated media:
+assets/media/btfu-logo.jpg
+assets/media/intro.mp4
+
+Recommended image format:
+- PNG or WebP
+- square crypto images, ideally 800x800 or larger
+- transparent PNG for unipeg
+- keep the exact filenames above
+
+The page automatically falls back to the generated SVG placeholders when a
+PNG is absent.
